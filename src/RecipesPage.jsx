@@ -11,7 +11,6 @@ export default function RecipesPage() {
   const targetRef = useRef(null);
 
   useEffect(() => {
-    // Stop the loader if the recipes state is not empty
     if (recipes.length > 0) {
       setIsLoading(false);
     }
@@ -22,16 +21,9 @@ export default function RecipesPage() {
   }
 
   async function output() {
-    // Start the loader
     setIsLoading(true);
-
-    // Fetch the recipes
     const data = await call(input);
-
-    // Set the recipes state
     setRecipes(data);
-
-    // Show the cards
     setShowCards(true);
   }
 

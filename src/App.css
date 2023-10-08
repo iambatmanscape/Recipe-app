@@ -179,4 +179,38 @@ div.cards div.card div.card-content h4.card-heading {
   100% {
     transform: rotate(360deg);
   }
+}
+@media screen and (max-width: 900px) {
+  section.home-page {
+    height: 50rem;
+  }
+  section.home-page button.to-recipe {
+    position: relative;
+    top: 14rem;
+  }
+  div.first-scroll div.content h2.rhead {
+    top: 2rem;
+    left: -4.2rem;
+  }
+  div.first-scroll div.content p.rsub {
+    left: -7.7rem;
+    font-size: 1.5rem;
+    top: 2rem;
+  }
+  div.first-scroll div.content input.inp {
+    width: 300px;
+    font-size: 1.4rem;
+    left: -7rem;
+    top: 2rem;
+  }
+  div.first-scroll div.content button.recipe-enter {
+    left: -2rem;
+    top: 2rem;
+  }
+  div.first-scroll img.img-2 {
+    display: none;
+  }
+  div.cards {
+    margin-top: 3rem;
+  }
 }/*# sourceMappingURL=App.css.map */

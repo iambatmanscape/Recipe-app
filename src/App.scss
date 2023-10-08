@@ -181,4 +181,45 @@ div.cards {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-    
+
+@media screen and (max-width:900px) {
+    section.home-page {
+       height:50rem;
+       button.to-recipe {
+        position:relative;
+        top:14rem;
+       }
+    }
+    div.first-scroll {
+        div.content {
+            h2.rhead { 
+                top: 2rem;
+                left:-4.2rem;
+            }
+            p.rsub {
+                left:-7.7rem;
+                font-size: 1.5rem;
+                top: 2rem;
+                
+            }
+            input.inp {
+                width: 300px;
+                font-size: 1.4rem;
+                left:-7rem;
+                top: 2rem;
+
+            }
+            button.recipe-enter {
+                left: -2rem;
+                top: 2rem;
+            }
+        }
+        
+        img.img-2 {
+            display: none;
+        }
+    }
+    div.cards {
+        margin-top: 3rem;
+    }
+}
