@@ -5,8 +5,8 @@ export default function Navbar() {
         <img src='./logo.png'/>
         <div className='nav-options'>
             <ul>
-                <li><Link to='/' className='links'>Home</Link></li>
-                <li><Link to='/recipe' className='links'>Recipes</Link></li>
+                <li><Link to='/Recipe-app' className='links'>Home</Link></li>
+                <li><Link to='/Recipe-app/recipe' className='links'>Recipes</Link></li>
             </ul>
         </div>
     </nav>)

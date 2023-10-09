@@ -8,8 +8,8 @@ export default function App() {
     return (<>
         <Navbar/>
         <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/recipe' element={<RecipesPage/>}/>
+          <Route path='/Recipe-app' element={<Home/>}/>
+          <Route path='/Recipe-app/recipe' element={<RecipesPage/>}/>
         </Routes>
     </>)
 }
