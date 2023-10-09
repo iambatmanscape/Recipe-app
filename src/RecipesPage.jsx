@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import call from './apicall';
 import Card from './Card';
 import Loading from './Loading';
+import img from './assets/rimg.jpg'
 
 export default function RecipesPage() {
   const [input, setInput] = useState('');
@@ -44,7 +45,7 @@ export default function RecipesPage() {
             </svg>
           </button>
         </div>
-        <img src='./src/assets/rimg.jpg' className='img-2' />
+        <img src={img} className='img-2' />
       </div>
 
       {showCards && (
