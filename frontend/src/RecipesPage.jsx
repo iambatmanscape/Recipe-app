@@ -45,7 +45,7 @@ export default function RecipesPage() {
             </svg>
           </button>
         </div>
-        <img src={img} className='img-2' />
+        {/* <img src={img} className='img-2' /> */}
       </div>
 
       {showCards && (

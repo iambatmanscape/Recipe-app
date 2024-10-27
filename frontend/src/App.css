@@ -44,8 +44,9 @@ section.home-page {
   margin-top: -3.2rem;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(./assets/bg.jpg) no-repeat;
   background-size: cover;
-  height: 652px;
+  height: 100.2vh;
   width: 100%;
+
 }
 section.home-page h2.heading {
   color: white;
@@ -73,10 +74,8 @@ section.home-page button.to-recipe {
 
 div.first-scroll {
   position: relative;
-  left: 8rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  display:flex;
+  justify-content:center;
 }
 div.first-scroll h2.rhead {
   color: orange;
