@@ -34,33 +34,21 @@ export default function RecipesPage() {
         <div className='content'>
           <h2 className='rhead'>Hungry?</h2>
           <p className='rsub'>Just Make Your Own Food!</p>
-          <input
-            className='inp'
-            placeholder='Enter Your Favorite Food...'
-            onChange={handleChange}
-          />
-          <button className='recipe-enter' onClick={output}>
-            SEARCH <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-              <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" fill='#ffffff'/>
-            </svg>
-          </button>
         </div>
-        {/* <img src={img} className='img-2' /> */}
       </div>
-
+      <div className='food_cards'>
       {showCards && (
-        <div className='cards' ref={targetRef}>
-          {isLoading ? <Loading /> : recipes.map((recipe, index) => (
-            <Card
-              key={index + 1}
-              serial={index + 1}
-              heading={recipe.title}
-              method={recipe.instructions}
-            />
-          ))}
-        </div>
-      )}
+          <div className='cards' ref={targetRef}>
+            {isLoading ? <Loading /> : recipes.map((recipe, index) => (
+              // <Card img_url={img} author={"Author"} food_name={"Special Food"} ratings={5}/>
+              <div>{recipe}</div>
+            ))}
+          </div>
+        )}
+      </div>
     </>
   );
 }
 
+
+{/* <Card img_url={img} author={"Author"} food_name={"Special Food"} ratings={5}/> */}

@@ -76,30 +76,24 @@ div.first-scroll {
   position: relative;
   display:flex;
   justify-content:center;
+  text-align: center;
 }
 div.first-scroll h2.rhead {
   color: orange;
   font-size: 4rem;
-  position: relative;
-  left: 7rem;
+  text-align: center;
+  
 }
-div.first-scroll .img-2 {
-  width: 800px;
-  height: 690px;
-  display: block;
-  position: relative;
-  top: -4rem;
-}
+
 div.first-scroll .rsub {
   position: relative;
   font-size: 2rem;
   margin-top: 1rem;
   color: rgb(206, 199, 199);
-  text-align: left;
+  text-align: center;
   font-weight: 600;
 }
 div.first-scroll .inp {
-  position: relative;
   margin-top: 3rem;
   height: 3rem;
   width: 32rem;
@@ -110,7 +104,7 @@ div.first-scroll .inp {
 }
 div.first-scroll button.recipe-enter {
   display: block;
-  position: relative;
+  /* position: relative; */
   left: 12rem;
   height: auto;
   width: auto;
@@ -125,40 +119,81 @@ div.first-scroll button.recipe-enter {
   cursor: pointer;
 }
 
-div.cards {
+div.food_cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+  padding: 10px;
+  justify-items: center;
+}
+
+/* Main card container */
+.food_card {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  min-width: 4rem;
-  padding: 15px 25px 15px 25px;
-  background-color: #f3f0ed;
+  align-items: center;
+  text-align: center;
 }
-div.cards div.card {
-  border: 1px solid black;
-  height: auto;
-  width: auto;
-  border-radius: 10px;
-  margin-bottom: 1rem;
+
+.food_card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Image container styling */
+.food_image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.food_image img.img_url {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text section styling */
+.food_text {
+  padding: 15px;
+}
+
+.food_text .author-name {
+  font-size: 0.9em;
+  color: #888;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.food_text .food-name {
+  font-size: 1.2em;
+  color: #333;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.food_text .ratings {
+  font-size: 0.9em;
+  color: #ff9800;
+  margin: 5px 0;
   display: flex;
-  flex-direction: row;
-  padding: 0px 10px 0px 10px;
-  box-shadow: 0 0 6px 3px grey;
-  background-color: white;
+  justify-content: center;
+  align-items: center;
 }
-div.cards div.card div.id {
-  padding: 5px 5px 5px 5px;
-  border-right: 1px solid black;
-  align-content: center;
-  display: flex;
-  flex-wrap: wrap;
+
+
+.food_text .ratings::before {
+  content: '⭐';
+  margin-right: 5px;
 }
-div.cards div.card div.card-content {
-  padding: 10px 10px 10px 10px;
-}
-div.cards div.card div.card-content h4.card-heading {
-  font-size: 1.3rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
+
+
+
 
 .loader {
   position: relative;
@@ -209,7 +244,4 @@ div.cards div.card div.card-content h4.card-heading {
   div.first-scroll img.img-2 {
     display: none;
   }
-  div.cards {
-    margin-top: 3rem;
-  }
-}/*# sourceMappingURL=App.css.map */
+}

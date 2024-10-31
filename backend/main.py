@@ -14,7 +14,7 @@ recipes = db['recipes']
 @app.get('/recipes',response_model=List[RecipesModel])
 async def get_recipes(skip:int = Query(0,ge=0),limit:int = Query(10,ge=1,le=20)):
     recipe_list = []
-    cursor = recipes.find().skip(skip).limit(limit)
+    cursor = recipes.find({},projection={"author":1,"photo_url":1,"title":1,"rating_stars":1}).skip(skip).limit(limit)
     async for recipe in cursor:
         recipe_list.append(recipe)
     return recipe_list
