@@ -102,3 +102,60 @@ class RecipeModel(BaseModel):
         if data.get("_id"):
             data["_id"] = ObjectId(data["_id"])
         return data
+
+
+class RecipesModel(BaseModel):
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str},
+        # Example moved to a separate variable for clarity
+        json_schema_extra={
+            "example": {
+                "author": "Stephanie",
+                "photo_url": "http://images.media-allrecipes.com/userphotos/560x315/582853.jpg",
+                "rating_stars": 4.32,
+                "title": "Basil, Roasted Peppers and Monterey Jack Cornbread"
+            }
+        }
+    )
+
+    id: Optional[str] = Field(default=None, alias="_id")
+    author: str = Field(...)
+    photo_url: Optional[str] = Field(default=None)
+    rating_stars: float = Field(default=0)
+    title: str = Field(...)
+
+    # Replace root_validator with model_validator
+    @model_validator(mode='before')
+    @classmethod
+    def convert_objectid(cls, data: dict) -> dict:
+        """Convert ObjectId to string if present"""
+        if isinstance(data.get("_id"), ObjectId):
+            data["_id"] = str(data["_id"])
+        return data
+
+    
+    @field_validator('rating_stars')
+    @classmethod
+    def validate_rating(cls, v: float) -> float:
+        if v < 0 or v > 5:
+            raise ValueError("Rating must be between 0 and 5")
+        return round(v, 2)  # Round to 2 decimal places
+
+    
+    @field_validator('photo_url')
+    @classmethod
+    def validate_photo_url(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and not v.startswith(('http://', 'https://')):
+            raise ValueError("Photo URL must start with http:// or https://")
+        return v
+
+    # Custom method to convert model to dict for MongoDB
+    def to_mongo(self) -> dict:
+        """Convert model to MongoDB-compatible dict"""
+        data = self.model_dump(by_alias=True, exclude_none=True)
+        # Convert string ID back to ObjectId if it exists
+        if data.get("_id"):
+            data["_id"] = ObjectId(data["_id"])
+        return data

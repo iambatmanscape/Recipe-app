@@ -1,5 +1,5 @@
 from fastapi import FastAPI,Query,HTTPException
-from database.mongodb import connection,RecipeModel
+from database.mongodb import connection,RecipeModel,RecipesModel
 from dotenv import load_dotenv
 from typing import List
 from bson import ObjectId
@@ -11,7 +11,7 @@ db = connection(getenv('MONGODB_STRING'))
 recipes = db['recipes']
 
 
-@app.get('/recipes',response_model=List[RecipeModel])
+@app.get('/recipes',response_model=List[RecipesModel])
 async def get_recipes(skip:int = Query(0,ge=0),limit:int = Query(10,ge=1,le=20)):
     recipe_list = []
     cursor = recipes.find().skip(skip).limit(limit)
