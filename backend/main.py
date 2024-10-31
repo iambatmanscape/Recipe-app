@@ -1,4 +1,5 @@
 from fastapi import FastAPI,Query,HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from database.mongodb import connection,RecipeModel,RecipesModel
 from dotenv import load_dotenv
 from typing import List
@@ -7,6 +8,16 @@ from os import getenv
 load_dotenv()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],  
+)
+
+
 db = connection(getenv('MONGODB_STRING'))
 recipes = db['recipes']
 
