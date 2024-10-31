@@ -1,47 +1,24 @@
-from motor.motor_asyncio import AsyncIOMotorClient,AsyncIOMotorDatabase
-from pydantic import BaseModel,Field,root_validator
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+from pydantic import BaseModel, Field, model_validator, field_validator, ConfigDict
 from bson import ObjectId
-from pyobjectID import PyObjectId
-from typing import Optional
+from typing import Optional, List
 
-def connection(uri:str)->AsyncIOMotorDatabase:
+def connection(uri: str) -> AsyncIOMotorDatabase:
     try:
         client = AsyncIOMotorClient(uri)
         db = client['recipe_collection']
         print('Mongodb Connected')
         return db
-
     except Exception as e:
         print(f"Error while connecting to mongodb {e}")
 
-
 class RecipeModel(BaseModel):
-    id: Optional[str] = Field(alias="_id", default=None)
-    author:str = Field(...)
-    cook_time_minutes:int = Field(...)
-    description:str = Field(...)
-    footnotes:list = Field(...)
-    ingredients:list[str] = Field(...)
-    instructions:list[str] = Field(...)
-    photo_url:Optional[str] = Field(...)
-    prep_time_minutes:Optional[int] = Field(...)
-    rating_stars:Optional[float] = Field(default=0)
-    review_count:Optional[int] = Field(default=0)
-    title:str = Field(...)
-    total_time_minutes:int = Field(...)
-
-    @root_validator(pre=True)
-    def convert_objectid_to_str(cls, values):
-        # Check if '_id' is in the dictionary and is an ObjectId, then convert to str
-        if "_id" in values and isinstance(values["_id"], ObjectId):
-            values["_id"] = str(values["_id"])
-        return values
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+        json_encoders={ObjectId: str},
+        # Example moved to a separate variable for clarity
+        json_schema_extra={
             "example": {
                 "author": "Stephanie",
                 "cook_time_minutes": 25,
@@ -49,33 +26,79 @@ class RecipeModel(BaseModel):
                 "footnotes": [],
                 "ingredients": [
                     "1/2 cup unsalted butter, chilled and cubed",
-                    "1 cup chopped onion",
-                    "1 3/4 cups cornmeal",
-                    "1 1/4 cups all-purpose flour",
-                    "1/4 cup white sugar",
-                    "1 tablespoon baking powder",
-                    "1 1/2 teaspoons salt",
-                    "1/2 teaspoon baking soda",
-                    "1 1/2 cups buttermilk",
-                    "3 eggs",
-                    "1 1/2 cups shredded pepperjack cheese",
-                    "1 1/3 cups frozen corn kernels, thawed and drained",
-                    "2 ounces roasted marinated red bell peppers, drained and chopped",
-                    "1/2 cup chopped fresh basil"
+                    "1 cup chopped onion"
                 ],
                 "instructions": [
-                    "Preheat oven to 400 degrees F (205 degrees C). Butter a 9x9x2 inch baking pan.",
-                    "Melt 1 tablespoon butter in medium nonstick skillet over medium-low heat. Add onion and saute until tender, about 10 minutes. Cool.",
-                    "Mix cornmeal with the flour, baking powder, sugar, salt, and baking soda in large bowl. Add 7 tablespoons butter and rub with fingertips until mixture resembles coarse meal.",
-                    "Whisk buttermilk and eggs in medium bowl to blend. Add buttermilk mixture to dry ingredients and stir until blended. Mix in cheese, corn, red peppers, basil, and onion. Transfer to prepared pan.",
-                    "Bake cornbread until golden and tester inserted comes out clean, about 45 minutes. Cool 20 minutes in pan. Cut cornbread into squares."
+                    "Preheat oven to 400 degrees F (205 degrees C).",
+                    "Butter a 9x9x2 inch baking pan."
                 ],
                 "photo_url": "http://images.media-allrecipes.com/userphotos/560x315/582853.jpg",
                 "prep_time_minutes": 55,
                 "rating_stars": 4.32,
                 "review_count": 46,
                 "title": "Basil, Roasted Peppers and Monterey Jack Cornbread",
-                "total_time_minutes": 100,
+                "total_time_minutes": 100
             }
         }
+    )
 
+    id: Optional[str] = Field(default=None, alias="_id")
+    author: str = Field(...)
+    cook_time_minutes: int = Field(...)
+    description: str = Field(...)
+    footnotes: List[str] = Field(default_factory=list)
+    ingredients: List[str] = Field(...)
+    instructions: List[str] = Field(...)
+    photo_url: Optional[str] = Field(default=None)
+    prep_time_minutes: Optional[int] = Field(default=None)
+    rating_stars: float = Field(default=0)
+    review_count: int = Field(default=0)
+    title: str = Field(...)
+    total_time_minutes: int = Field(...)
+
+    # Replace root_validator with model_validator
+    @model_validator(mode='before')
+    @classmethod
+    def convert_objectid(cls, data: dict) -> dict:
+        """Convert ObjectId to string if present"""
+        if isinstance(data.get("_id"), ObjectId):
+            data["_id"] = str(data["_id"])
+        return data
+
+    # Add field-level validators for additional validation
+    @field_validator('cook_time_minutes', 'prep_time_minutes', 'total_time_minutes')
+    @classmethod
+    def validate_time_values(cls, v: int, info) -> int:
+        if v is not None and v < 0:
+            raise ValueError(f"{info.field_name} cannot be negative")
+        return v
+
+    @field_validator('rating_stars')
+    @classmethod
+    def validate_rating(cls, v: float) -> float:
+        if v < 0 or v > 5:
+            raise ValueError("Rating must be between 0 and 5")
+        return round(v, 2)  # Round to 2 decimal places
+
+    @field_validator('ingredients', 'instructions')
+    @classmethod
+    def validate_list_not_empty(cls, v: List[str], info) -> List[str]:
+        if not v:
+            raise ValueError(f"{info.field_name} cannot be empty")
+        return v
+
+    @field_validator('photo_url')
+    @classmethod
+    def validate_photo_url(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and not v.startswith(('http://', 'https://')):
+            raise ValueError("Photo URL must start with http:// or https://")
+        return v
+
+    # Custom method to convert model to dict for MongoDB
+    def to_mongo(self) -> dict:
+        """Convert model to MongoDB-compatible dict"""
+        data = self.model_dump(by_alias=True, exclude_none=True)
+        # Convert string ID back to ObjectId if it exists
+        if data.get("_id"):
+            data["_id"] = ObjectId(data["_id"])
+        return data
