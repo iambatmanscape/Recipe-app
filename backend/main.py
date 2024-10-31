@@ -1,5 +1,6 @@
 from fastapi import FastAPI,Query,HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 from database.mongodb import connection,RecipeModel,RecipesModel
 from dotenv import load_dotenv
 from typing import List
@@ -38,3 +39,7 @@ async def get_recipe(recipe_id:str):
         raise HTTPException(status_code=404, detail="Recipe not found")
 
     return recipe
+
+
+if __name__ == "__main__":
+    uvicorn.run(port=8000)
