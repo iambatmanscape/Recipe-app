@@ -7,9 +7,9 @@
  * @throws {Error} If the request fails
  */
 
-const baseUrl = 'https://neglected-spider-7vpxxwx4qg562pxpp-8000.app.github.dev';
+const baseUrl = 'https://recipe-app-vhll.onrender.com';
 
-async function fetchRecipes(skip = 0, limit = 10) {
+export async function fetchRecipes(skip = 0, limit = 10) {
     try {
         const url = `${baseUrl}/recipes?skip=${skip}&limit=${limit}`;
         const response = await fetch(url, {
@@ -38,7 +38,7 @@ async function fetchRecipes(skip = 0, limit = 10) {
  * @returns {Promise<Object>} The recipe data
  * @throws {Error} If the request fails
  */
-async function fetchRecipes(recipeId) {
+export async function fetchRecipe(recipeId) {
     try {
         const url = `${baseUrl}/recipes/${recipeId}`;
         const response = await fetch(url, {
@@ -59,3 +59,4 @@ async function fetchRecipes(recipeId) {
         throw error;
     }
 }
+

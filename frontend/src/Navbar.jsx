@@ -1,5 +1,11 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {Link} from 'react-router-dom';
+
+const [isRecipePage,setIsRecipePage] = useState(false)
+
+
+
+
 export default function Navbar() {
     return (<nav>
         <img src='./logo.png'/>

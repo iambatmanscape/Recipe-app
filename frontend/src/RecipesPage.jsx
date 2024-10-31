@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import call from './apicall';
+import { fetchRecipe,fetchRecipes } from './apicall';
 import Card from './Card';
 import Loading from './Loading';
-import img from './assets/rimg.jpg'
 
 export default function RecipesPage() {
   const [input, setInput] = useState('');
@@ -12,20 +11,16 @@ export default function RecipesPage() {
   const targetRef = useRef(null);
 
   useEffect(() => {
-    if (recipes.length > 0) {
-      setIsLoading(false);
-    }
-  }, [recipes]);
+    output()
+  }, []);
 
-  function handleChange({ target }) {
-    setInput(target.value);
-  }
 
   async function output() {
     setIsLoading(true);
-    const data = await call(input);
+    const data = await fetchRecipes(0,12);
     setRecipes(data);
     setShowCards(true);
+    setIsLoading(false);
   }
 
   return (
@@ -37,15 +32,23 @@ export default function RecipesPage() {
         </div>
       </div>
       <div className='food_cards'>
-      {showCards && (
-          <div className='cards' ref={targetRef}>
-            {isLoading ? <Loading /> : recipes.map((recipe, index) => (
-              // <Card img_url={img} author={"Author"} food_name={"Special Food"} ratings={5}/>
-              <div>{recipe}</div>
-            ))}
-          </div>
-        )}
-      </div>
+  {showCards && (
+    isLoading ? (
+      <Loading />
+    ) : (
+      recipes.map((recipe, index) => (
+        <Card
+          key={index + 1}
+          img_url={recipe.photo_url}
+          author={recipe.author}
+          food_name={recipe.title}
+          ratings={recipe.rating_stars}
+        />
+      ))
+    )
+  )}
+</div>
+
     </>
   );
 }
