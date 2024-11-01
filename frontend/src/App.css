@@ -30,6 +30,8 @@ nav .nav-options ul {
 }
 nav .nav-options ul li {
   padding: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 nav .nav-options ul li .links {
   text-decoration: none;

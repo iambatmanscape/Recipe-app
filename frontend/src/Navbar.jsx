@@ -1,13 +1,15 @@
 import React,{useState} from 'react';
-import {Link} from 'react-router-dom';
-
-const [isRecipePage,setIsRecipePage] = useState(false)
-
-
-
+import {Link,useLocation} from 'react-router-dom';
 
 export default function Navbar() {
-    return (<nav>
+    const location = useLocation();
+    let navStyle = {};
+
+    if (location.pathname === '/Recipe-app/recipe') {
+        navStyle = {backgroundColor:'orange'}
+    };
+
+    return (<nav style={navStyle}>
         <img src='./logo.png'/>
         <div className='nav-options'>
             <ul>

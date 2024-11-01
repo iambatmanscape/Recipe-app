@@ -7,7 +7,7 @@
  * @throws {Error} If the request fails
  */
 
-const baseUrl = 'https://recipe-app-vhll.onrender.com';
+const baseUrl = 'https://neglected-spider-7vpxxwx4qg562pxpp-8000.app.github.dev';
 
 export async function fetchRecipes(skip = 0, limit = 10) {
     try {
