@@ -1,21 +1,22 @@
-import React,{useState} from 'react';
-import {Link,useLocation} from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
-    const location = useLocation();
-    let navStyle = {};
+const Navbar = () => {
 
-    if (location.pathname === '/Recipe-app/recipe') {
-        navStyle = {backgroundColor:'orange'}
-    };
+  return (
+    <nav className="navbar">
+      <div className="nav-content">
+        <Link to="/Recipe-app" className="nav-link">
+          <span className="nav-text">Home</span>
+        </Link>
 
-    return (<nav style={navStyle}>
-        <img src='./logo.png'/>
-        <div className='nav-options'>
-            <ul>
-                <li><Link to='/Recipe-app' className='links'>Home</Link></li>
-                <li><Link to='/Recipe-app/recipe' className='links'>Recipes</Link></li>
-            </ul>
-        </div>
-    </nav>)
-}
+
+        <Link to="/Recipe-app/recipe" className="nav-link">
+          <span className="nav-text">Recipes</span>
+        </Link>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
