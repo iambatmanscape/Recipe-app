@@ -6,7 +6,7 @@ export default function Card({ img_url,food_name,author,ratings,recipe_id }) {
     const navigator = useNavigate();
 
     async function handleClick() {
-        navigator(`/Recipe-app/recipe/${recipe_id}`)
+        navigator(`/recipe/${recipe_id}`)
       }
 
     return (<div className="food_card" onClick={handleClick}>

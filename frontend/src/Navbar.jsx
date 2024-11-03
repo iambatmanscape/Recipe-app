@@ -6,12 +6,12 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="nav-content">
-        <Link to="/Recipe-app" className="nav-link">
+        <Link to="/" className="nav-link">
           <span className="nav-text">Home</span>
         </Link>
 
 
-        <Link to="/Recipe-app/recipe" className="nav-link">
+        <Link to="/recipe" className="nav-link">
           <span className="nav-text">Recipes</span>
         </Link>
       </div>

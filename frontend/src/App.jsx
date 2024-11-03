@@ -10,11 +10,11 @@ export default function App() {
     return (<>
         <Navbar/>
         <Routes>
-          <Route path='/Recipe-app' element={<Home/>}/>
-          <Route path='/Recipe-app/recipe' element={<RecipesPage/>}/>
-          <Route path='/Recipe-app/recipe/:id' element={<RecipePage/>}/>
-          <Route path="/Recipe-app/recipe/not-found" element={<RecipeNotFound />} />
-          <Route path="/Recipe-app/not-found" element={<RecipeNotFound />} />
+          <Route path='/' element={<Home/>}/>
+          <Route path='/recipe' element={<RecipesPage/>}/>
+          <Route path='/recipe/:id' element={<RecipePage/>}/>
+          <Route path="/recipe/not-found" element={<RecipeNotFound />} />
+          <Route path="/not-found" element={<RecipeNotFound />} />
         </Routes>
     </>)
 }

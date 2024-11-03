@@ -38,7 +38,7 @@ const RecipePage = () => {
   const [isLoading,setIsLoading] = useState(false);
 
   const handleError = () => {
-    navigate('/Recipe-app/not-found');
+    navigate('/not-found');
   };
   
   const getRecipe = async () => {
