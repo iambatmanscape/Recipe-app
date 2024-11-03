@@ -7,7 +7,7 @@
  * @throws {Error} If the request fails
  */
 
-const baseUrl = 'https://neglected-spider-7vpxxwx4qg562pxpp-8000.app.github.dev';
+const baseUrl = 'https://36cf-13-127-208-184.ngrok-free.app';
 
 export async function fetchRecipes(skip = 0, limit = 10) {
     try {
@@ -15,8 +15,11 @@ export async function fetchRecipes(skip = 0, limit = 10) {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'accept': 'application/json'
-            }
+                'accept': 'application/json',
+                'ngrok-skip-browser-warning': 'true',  // Skip ngrok browser warning
+                'Content-Type': 'application/json'
+            },
+            cache: 'no-store'  // Prevents caching issues with ngrok
         });
 
         if (!response.ok) {
@@ -44,8 +47,11 @@ export async function fetchRecipeById(recipeId) {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'accept': 'application/json'
-            }
+                'accept': 'application/json',
+                'ngrok-skip-browser-warning': 'true',  // Skip ngrok browser warning
+                'Content-Type': 'application/json'
+            },
+            cache: 'no-store'  // Prevents caching issues with ngrok
         });
 
         if (!response.ok) {
@@ -63,18 +69,22 @@ export async function fetchRecipeById(recipeId) {
 /**
  * Filters recipes by name
  * @param {string} recipe_query - The name of the recipe to fetch
- * @param {string} baseUrl - Base URL of the API (optional)
+ * @param {number} skip - Number of items to skip (for pagination)
+ * @param {number} limit - Maximum number of items to return
  * @returns {Promise<Object>} The recipe data
  * @throws {Error} If the request fails
  */
-export async function fetchRecipeByName(recipe_query,skip,limit) {
+export async function fetchRecipeByName(recipe_query, skip = 0, limit = 10) {
     try {
         const url = `${baseUrl}/recipes/getbyname/${recipe_query}?skip=${skip}&limit=${limit}`;
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'accept': 'application/json'
-            }
+                'accept': 'application/json',
+                'ngrok-skip-browser-warning': 'true',  // Skip ngrok browser warning
+                'Content-Type': 'application/json'
+            },
+            cache: 'no-store'  // Prevents caching issues with ngrok
         });
 
         if (!response.ok) {
@@ -88,4 +98,3 @@ export async function fetchRecipeByName(recipe_query,skip,limit) {
         throw error;
     }
 }
-

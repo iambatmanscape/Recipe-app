@@ -13,8 +13,16 @@ export default function RecipesPage() {
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const observerTarget = useRef(null);
+  const inputRef = useRef(null);
   const limit = 12;
 
+  const clearSearch = () => {
+    setRecipes([]);
+    inputRef.current.value="";
+    setSearchQuery('');
+    setSkip(0);
+    loadMoreRecipes();
+  }
 
   const handleSearch = async () => {
     if (isLoading) return;
@@ -128,6 +136,7 @@ export default function RecipesPage() {
       <div className="search-container">
           <div className='form'>
             <input
+              ref={inputRef}
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -138,8 +147,11 @@ export default function RecipesPage() {
             <button type="button" className="search-button" onClick={()=>{setRecipes([]);handleSearch();}}>
               <span className="search-icon">🔍</span>
             </button>
-          </div>
+            <button type="button" className="clear-button" onClick={clearSearch}>
+              <span className="search-icon">Clear</span>
+            </button>
         </div>
+          </div>
         </div>
       <div className='food_cards'>
         {showCards && recipes.map((recipe, index) => (
@@ -154,7 +166,7 @@ export default function RecipesPage() {
         ))}
         
         {/* Loading indicator and observer target */}
-        <div ref={observerTarget} className="w-full">
+        <div ref={observerTarget}>
           {isLoading && <Loading />}
         </div>
 

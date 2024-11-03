@@ -471,12 +471,265 @@ div.food_cards {
   transition: transform 0.2s ease;
 }
 
+/* Clear button base styles */
+.clear-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #f44336;  /* Red color for clear action */
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover state */
+.clear-button:hover {
+  background-color: #d32f2f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Active/Pressed state */
+.clear-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus state */
+.clear-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3);
+}
+
+/* Disabled state */
+.clear-button:disabled {
+  background-color: #ffcdd2;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.7;
+}
+
+/* Clear icon/text styles */
+.search-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+
+/* Optional: Add loading state */
+.clear-button.loading {
+  background-color: #ff7961;
+  cursor: wait;
+}
+
+/* Optional: Alternative subtle version */
+.clear-button.subtle {
+  background-color: transparent;
+  color: #f44336;
+  border: 1px solid #f44336;
+}
+
+.clear-button.subtle:hover {
+  background-color: #fff5f5;
+}
+
+/* Optional: Small size variant */
+.clear-button.small {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+/* Optional: Large size variant */
+.clear-button.large {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .clear-button {
+    padding: 10px 20px;  /* Larger touch target on mobile */
+    font-size: 16px;
+  }
+}
+
 .search-button:hover {
   transform: scale(1.1);
 }
 
 .search-icon {
   font-size: 1.2rem;
+}
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: #fff7ed;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.content {
+  max-width: 32rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.icon-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem;
+}
+
+.chef-hat {
+  position: relative;
+  animation: bounce 2s infinite;
+}
+
+.hat-top {
+  width: 80px;
+  height: 60px;
+  background-color: #dc2626;
+  border-radius: 50% 50% 0 0;
+  margin: 0 auto;
+}
+
+.hat-base {
+  width: 100px;
+  height: 25px;
+  background-color: #dc2626;
+  border-radius: 12px;
+  margin: -5px auto 0;
+}
+
+.utensils {
+  position: absolute;
+  bottom: -1rem;
+  right: -1rem;
+  width: 48px;
+  height: 48px;
+  transform: rotate(12deg);
+}
+
+.fork, .knife {
+  position: absolute;
+  width: 6px;
+  height: 40px;
+  background-color: #f97316;
+  border-radius: 3px;
+}
+
+.fork {
+  transform: rotate(-45deg);
+}
+
+.knife {
+  transform: rotate(45deg);
+}
+
+.title {
+  font-size: 3.75rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.suggestion-box {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.suggestion-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.suggestion-list {
+  color: #4b5563;
+  text-align: left;
+  padding-left: 1.5rem;
+}
+
+.suggestion-list li {
+  margin-bottom: 0.5rem;
+}
+
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #dc2626;
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.home-button:hover {
+  background-color: #b91c1c;
+}
+
+.home-icon {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.roof {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid white;
+}
+
+.base {
+  width: 14px;
+  height: 10px;
+  background-color: white;
+  margin: 0 auto;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 2.5rem;
+  }
+  .subtitle {
+    font-size: 1.125rem;
+  }
 }
 
 @media (max-width: 768px) {

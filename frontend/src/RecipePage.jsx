@@ -1,10 +1,11 @@
 import React,{useEffect,useState} from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { fetchRecipeById } from './apicall';
 import Loading from './Loading';
 
 const RecipePage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [recipe,setRecipe] = useState({
     "_id": "12345",
     "author": "DeeDee",
@@ -35,20 +36,29 @@ const RecipePage = () => {
     "title": "Oatmeal Bread I"
   });
   const [isLoading,setIsLoading] = useState(false);
+
+  const handleError = () => {
+    navigate('/Recipe-app/not-found');
+  };
   
   const getRecipe = async () => {
     setIsLoading(true);
-    const recipe = await fetchRecipeById(id);
-    console.log(recipe);
-    setRecipe(recipe);
-    setIsLoading(false);
+    try {
+      const recipe = await fetchRecipeById(id);
+      setRecipe(recipe);
+      setIsLoading(false);
+    } catch(e) {
+      handleError();
+      console.log('Recipe not found!')
+    } finally {
+      setIsLoading(false);
+    }
+    
   }
 
 
   useEffect(()=>{
-    console.log('started');
     getRecipe();
-    console.log('ended');
   },[])
   
 
