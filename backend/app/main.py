@@ -1,7 +1,7 @@
 from fastapi import FastAPI,Query,HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from database.mongodb import connection,RecipeModel,RecipesModel
+from .database.mongodb import connection,RecipeModel,RecipesModel
 from dotenv import load_dotenv
 from typing import List
 from bson import ObjectId
