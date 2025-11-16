@@ -44,7 +44,7 @@ const RecipePage = () => {
   const getRecipe = async () => {
     setIsLoading(true);
     try {
-      const recipe = await fetchRecipeById(id);
+      const recipe = await fetchRecipeById(import.meta.env.VITE_PUBLIC_BACKEND_URL,id);
       setRecipe(recipe);
       setIsLoading(false);
     } catch(e) {

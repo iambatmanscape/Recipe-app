@@ -1,162 +1,106 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import { fetchRecipeByName, fetchRecipes } from './apicall';
-import Card from './Card';
-import Loading from './Loading';
+import React, { useState, useRef, useEffect } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import Card from "./Card";
+import Loading from "./Loading";
+import { fetchRecipeByName, fetchRecipes } from "./apicall";
 
 export default function RecipesPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
-  const [recipes, setRecipes] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showCards, setShowCards] = useState(false);
-  const [skip, setSkip] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const observerTarget = useRef(null);
-  const inputRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const observerRef = useRef(null);
   const limit = 12;
 
-  const clearSearch = () => {
-    setRecipes([]);
-    inputRef.current.value="";
-    setSearchQuery('');
-    setSkip(0);
-    loadMoreRecipes();
-  }
-
-  const handleSearch = async () => {
-    if (isLoading) return;
-
-    setIsLoading(true);
-    try {
-      if (searchQuery.trim()) {
-        const newRecipes = await fetchRecipeByName(searchQuery,skip, limit);
-      
-        // If no new recipes or less recipes than limit, we've reached the end
-        if (!newRecipes || newRecipes.length < limit) {
-          setHasMore(false);
-        }
-
-        if (newRecipes && newRecipes.length > 0) {
-          setRecipes(prevRecipes => [...prevRecipes, ...newRecipes]);
-          setSkip(prevSkip => prevSkip + limit);
-        }
-        
-        setShowCards(true);
-        }
-      
-    } catch (error) {
-      console.error('Error loading recipes:', error);
-    } finally {
-      setIsLoading(false);
+  const loadFn = async ({ pageParam = 0, queryKey }) => {
+    const [, query] = queryKey;
+    if (query) {
+      return fetchRecipeByName(
+        import.meta.env.VITE_PUBLIC_BACKEND_URL,
+        query,
+        pageParam,
+        limit
+      );
+    } else {
+      return fetchRecipes(
+        import.meta.env.VITE_PUBLIC_BACKEND_URL,
+        pageParam,
+        limit
+      );
     }
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      if (searchQuery.length) {
-        setRecipes([]);
-        handleSearch();
-      }
-    }
-  };
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["recipes", searchQuery],
+    queryFn: loadFn,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) =>
+      lastPage.length < limit ? undefined : pages.length * limit,
+  });
 
-
-
-  useEffect(() => {
-    if (!searchQuery.length) {
-      loadMoreRecipes();
-    } 
-  }, []);
+  const allRecipes = data?.pages.flat() || [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      entries => {
-        const firstEntry = entries[0];
-        if (firstEntry.isIntersecting && hasMore && !isLoading) {
-          if (!searchQuery.length) {
-            loadMoreRecipes();
-          } else {
-            handleSearch();
-          }
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
         }
       },
-      {
-        threshold: 0.1,
-        rootMargin: '20px'
-      }
+      { threshold: 0.5 }
     );
 
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [isLoading, hasMore]);
-
-  const loadMoreRecipes = async () => {
-    if (isLoading) return;
-
-    setIsLoading(true);
-    try {
-      const newRecipes = await fetchRecipes(skip, limit);
-      
-      // If no new recipes or less recipes than limit, we've reached the end
-      if (!newRecipes || newRecipes.length < limit) {
-        setHasMore(false);
-      }
-
-      if (newRecipes && newRecipes.length > 0) {
-        setRecipes(prevRecipes => [...prevRecipes, ...newRecipes]);
-        setSkip(prevSkip => prevSkip + limit);
-      }
-      
-      setShowCards(true);
-    } catch (error) {
-      console.error('Error loading recipes:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    if (observerRef.current) observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, fetchNextPage]);
 
   return (
     <>
-      <div className='first-scroll'>
-        <div className='content'>
-          <h2 className='rhead'>Hungry?</h2>
-          <p className='rsub'>Look for the best recipes around!</p>
+      <div className="first-scroll">
+        <div className="content">
+          <h2 className="rhead">Hungry?</h2>
+          <p className="rsub">Look for the best recipes around!</p>
         </div>
       </div>
-      <div className='search-hold'>
-      <div className="search-container">
-          <div className='form'>
+
+      <div className="search-hold">
+        <div className="search-container">
+          <div className="form">
             <input
-              ref={inputRef}
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search recipes..."
               className="search-input"
-              onKeyDown={handleKeyPress}
+              onKeyDown={(e) => e.key === "Enter" && refetch()}
             />
-            <button type="button" className="search-button" onClick={()=>{setRecipes([]);handleSearch();}}>
-              <span className="search-icon">🔍</span>
+
+            <button
+              type="button"
+              className="search-button"
+              onClick={() => refetch()}
+            >
+              🔍
             </button>
-            <button type="button" className="clear-button" onClick={clearSearch}>
-              <span className="search-icon">Clear</span>
+
+            <button
+              type="button"
+              className="clear-button"
+              onClick={() => setSearchQuery("")}
+            >
+              Clear
             </button>
-        </div>
           </div>
         </div>
-      <div className='food_cards'>
-        {showCards && recipes.map((recipe, index) => (
+      </div>
+
+      <div className="food_cards">
+        {allRecipes.map((recipe) => (
           <Card
-            key={index + 1}
+            key={recipe._id}
             recipe_id={recipe._id}
             img_url={recipe.photo_url}
             author={recipe.author}
@@ -164,17 +108,13 @@ export default function RecipesPage() {
             ratings={recipe.rating_stars}
           />
         ))}
-        
-        {/* Loading indicator and observer target */}
-        <div ref={observerTarget}>
+
+        <div ref={observerRef}>
           {isLoading && <Loading />}
         </div>
 
-        {/* No more recipes message */}
-        {!hasMore && recipes.length > 0 && (
-          <div>
-            No more recipes to load
-          </div>
+        {!hasNextPage && allRecipes.length > 0 && (
+          <div>No more recipes to load</div>
         )}
       </div>
     </>

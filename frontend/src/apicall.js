@@ -7,10 +7,12 @@
  * @throws {Error} If the request fails
  */
 
-const baseUrl = 'https://36cf-13-127-208-184.ngrok-free.app';
 
-export async function fetchRecipes(skip = 0, limit = 10) {
+export async function fetchRecipes(baseUrl, skip = 0, limit = 10) {
     try {
+        if (baseUrl.length === 0) {
+            baseUrl = 'http://localhost:8000';
+        }
         const url = `${baseUrl}/recipes?skip=${skip}&limit=${limit}`;
         const response = await fetch(url, {
             method: 'GET',
@@ -41,8 +43,11 @@ export async function fetchRecipes(skip = 0, limit = 10) {
  * @returns {Promise<Object>} The recipe data
  * @throws {Error} If the request fails
  */
-export async function fetchRecipeById(recipeId) {
+export async function fetchRecipeById(baseUrl, recipeId) {
     try {
+        if (baseUrl.length === 0) {
+            baseUrl = 'http://localhost:8000';
+        }
         const url = `${baseUrl}/recipes/getbyid/${recipeId}`;
         const response = await fetch(url, {
             method: 'GET',
@@ -68,14 +73,18 @@ export async function fetchRecipeById(recipeId) {
 
 /**
  * Filters recipes by name
+ * @param {string} baseUrl - Base URL of the API (optional)
  * @param {string} recipe_query - The name of the recipe to fetch
  * @param {number} skip - Number of items to skip (for pagination)
  * @param {number} limit - Maximum number of items to return
  * @returns {Promise<Object>} The recipe data
  * @throws {Error} If the request fails
  */
-export async function fetchRecipeByName(recipe_query, skip = 0, limit = 10) {
+export async function fetchRecipeByName(baseUrl, recipe_query, skip = 0, limit = 10) {
     try {
+        if (baseUrl.length === 0) {
+            baseUrl = 'http://localhost:8000';
+        }
         const url = `${baseUrl}/recipes/getbyname/${recipe_query}?skip=${skip}&limit=${limit}`;
         const response = await fetch(url, {
             method: 'GET',
