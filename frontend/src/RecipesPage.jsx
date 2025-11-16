@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Card from "./Card";
 import Loading from "./Loading";
@@ -27,19 +27,14 @@ export default function RecipesPage() {
     }
   };
 
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    refetch,
-  } = useInfiniteQuery({
-    queryKey: ["recipes", searchQuery],
-    queryFn: loadFn,
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) =>
-      lastPage.length < limit ? undefined : pages.length * limit,
-  });
+  const { data, isLoading, fetchNextPage, hasNextPage, refetch } =
+    useInfiniteQuery({
+      queryKey: ["recipes", searchQuery],
+      queryFn: loadFn,
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.length < limit ? undefined : pages.length * limit,
+    });
 
   const allRecipes = data?.pages.flat() || [];
 
@@ -109,12 +104,10 @@ export default function RecipesPage() {
           />
         ))}
 
-        <div ref={observerRef}>
-          {isLoading && <Loading />}
-        </div>
+        <div ref={observerRef}>{isLoading && <Loading />}</div>
 
         {!hasNextPage && allRecipes.length > 0 && (
-          <div>No more recipes to load</div>
+          <div className="end-message">No more recipes to load</div>
         )}
       </div>
     </>
